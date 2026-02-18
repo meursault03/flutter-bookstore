@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login_screen/features/login/components/text_styles.dart';
+import 'package:login_screen/services/session_manager.dart';
 
 import 'background.dart';
 import 'custom_buttons.dart';
@@ -10,13 +11,19 @@ import 'custom_buttons.dart';
 class RoundTextInput extends StatelessWidget {
   final String hintText;
   final bool isPassword;
-
-  const RoundTextInput(this.hintText, {super.key, required this.isPassword});
+  TextEditingController controller;
+  RoundTextInput(
+    this.hintText, {
+    super.key,
+    required this.isPassword,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextField(
+        controller: controller,
         style: GoogleFonts.inter(),
         obscureText: isPassword,
         obscuringCharacter: '•',
@@ -123,8 +130,25 @@ class _AuthToggle extends State<AuthToggle> {
 }
 
 /// Formulário de login com campos: email e senha.
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _rememberMe = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +165,11 @@ class LoginForm extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        const RoundTextInput('example@dominio.com', isPassword: false),
+        RoundTextInput(
+          'example@dominio.com',
+          isPassword: false,
+          controller: emailController,
+        ),
         const SizedBox(height: 16),
         const Padding(
           padding: EdgeInsets.only(left: 8, bottom: 3),
@@ -152,17 +180,127 @@ class LoginForm extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        const RoundTextInput('•••••••••••', isPassword: true),
+        SizedBox(
+          child: TextField(
+            controller: passwordController,
+            obscureText: _obscurePassword,
+            obscuringCharacter: '•',
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              hintText: '•••••••••••',
+              hintStyle: const TextStyle(
+                color: Color.fromARGB(255, 158, 158, 158),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(
+                    value: _rememberMe,
+                    onChanged: (value) {
+                      setState(() {
+                        _rememberMe = value ?? false;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                StyleTextUnaligned(
+                  'Lembrar de mim',
+                  13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[600],
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                // TODO: tela de forgot password
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Funcionalidade em desenvolvimento'),
+                  ),
+                );
+              },
+              child: const StyleTextUnaligned(
+                'Esqueceu a senha?',
+                13,
+                fontWeight: FontWeight.w600,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 24),
-        RoundButton('Login', onPressed: () {}),
+        RoundButton(
+          'Login',
+          onPressed: () async {
+            final Map session = await SessionManager().getSession();
+            if (context.mounted) {
+              if (session['email'] == emailController.text) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Login realizado com sucesso!')),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Email incorreto.')),
+                );
+              }
+            }
+          },
+        ),
       ],
     );
   }
 }
 
-/// Formulário de registro com campos: nome, sobrenome, email, senha e confirmação.
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
+
+  @override
+  State<RegisterForm> createState() => _RegisterForm();
+}
+
+/// Formulário de registro com campos: nome, sobrenome, email, senha e confirmação.
+class _RegisterForm extends State<RegisterForm> {
+  TextEditingController forenameController = TextEditingController();
+  TextEditingController surnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    forenameController.dispose();
+    surnameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +308,14 @@ class RegisterForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        const Row(
+        Row(
           children: [
             Expanded(
               flex: 50,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(left: 8, bottom: 3),
                     child: StyleTextUnaligned(
                       'Nome',
@@ -186,18 +324,22 @@ class RegisterForm extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  RoundTextInput('João', isPassword: false),
+                  RoundTextInput(
+                    'João',
+                    isPassword: false,
+                    controller: forenameController,
+                  ),
                 ],
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               flex: 50,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(left: 8, bottom: 3),
                     child: StyleTextUnaligned(
                       'Sobrenome',
@@ -206,7 +348,11 @@ class RegisterForm extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-                  RoundTextInput('da Silva', isPassword: false),
+                  RoundTextInput(
+                    'da Silva',
+                    isPassword: false,
+                    controller: surnameController,
+                  ),
                 ],
               ),
             ),
@@ -216,13 +362,17 @@ class RegisterForm extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.only(left: 8, bottom: 3),
           child: StyleTextUnaligned(
-            "Email",
+            'Email',
             13,
             fontWeight: FontWeight.w400,
             color: Colors.grey,
           ),
         ),
-        const RoundTextInput('example@dominio.com', isPassword: false),
+        RoundTextInput(
+          'example@dominio.com',
+          isPassword: false,
+          controller: emailController,
+        ),
         const SizedBox(height: 16),
         const Padding(
           padding: EdgeInsets.only(left: 8, bottom: 3),
@@ -233,7 +383,11 @@ class RegisterForm extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        const RoundTextInput('•••••••••••', isPassword: true),
+        RoundTextInput(
+          '•••••••••••',
+          isPassword: true,
+          controller: passwordController,
+        ),
         const SizedBox(height: 16),
         const Padding(
           padding: EdgeInsets.only(left: 8, bottom: 3),
@@ -244,9 +398,35 @@ class RegisterForm extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        const RoundTextInput('•••••••••••', isPassword: true),
+        RoundTextInput(
+          '•••••••••••',
+          isPassword: true,
+          controller: confirmPasswordController,
+        ),
         const SizedBox(height: 24),
-        RoundButton('Registrar', onPressed: () {}),
+        RoundButton(
+          'Registrar',
+          onPressed: () async {
+            if (passwordController.text != confirmPasswordController.text) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('As senhas não coincidem.')),
+              );
+              return;
+            }
+            await SessionManager().saveSession(
+              forenameController.text,
+              surnameController.text,
+              emailController.text,
+            );
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Registro realizado com sucesso!'),
+                ),
+              );
+            }
+          },
+        ),
       ],
     );
   }
