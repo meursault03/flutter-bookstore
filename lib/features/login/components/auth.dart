@@ -276,6 +276,12 @@ class _LoginFormState extends State<LoginForm> {
         RoundButton(
           'Login',
           onPressed: () async {
+            if (emailController.text.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Digite seu email.')),
+              );
+              return;
+            }
             final Map session = await SessionManager().getSession();
             if (context.mounted) {
               if (session['email'] == emailController.text) {
@@ -430,6 +436,16 @@ class _RegisterForm extends State<RegisterForm> {
         RoundButton(
           'Registrar',
           onPressed: () async {
+            // Check for empty fields
+            if (forenameController.text.isEmpty ||
+                surnameController.text.isEmpty ||
+                emailController.text.isEmpty ||
+                passwordController.text.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Preencha todos os campos.')),
+              );
+              return;
+            }
             if (passwordController.text != confirmPasswordController.text) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('As senhas não coincidem.')),
