@@ -144,6 +144,25 @@ class _LoginFormState extends State<LoginForm> {
   bool _rememberMe = false;
 
   @override
+  void initState() {
+    super.initState();
+    _loadRememberMe();
+  }
+
+  Future<void> _loadRememberMe() async {
+    final remembered = await SessionManager().getRememberMe();
+    if (remembered) {
+      final session = await SessionManager().getSession();
+      if (context.mounted) {
+        setState(() {
+          _rememberMe = true;
+          emailController.text = session['email'] ?? '';
+        });
+      }
+    }
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
@@ -238,7 +257,6 @@ class _LoginFormState extends State<LoginForm> {
             ),
             GestureDetector(
               onTap: () {
-                // TODO: tela de forgot password
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Funcionalidade em desenvolvimento'),
@@ -261,9 +279,14 @@ class _LoginFormState extends State<LoginForm> {
             final Map session = await SessionManager().getSession();
             if (context.mounted) {
               if (session['email'] == emailController.text) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Login realizado com sucesso!')),
-                );
+                await SessionManager().setRememberMe(_rememberMe);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Login realizado com sucesso!'),
+                    ),
+                  );
+                }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Email incorreto.')),

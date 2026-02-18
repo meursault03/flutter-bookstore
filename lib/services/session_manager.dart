@@ -36,4 +36,16 @@ class SessionManager {
     var prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
+
+  /// Armazena o valor de 'rememberMe' no armazenamento local.
+  Future<void> setRememberMe(bool value) async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rememberMe', value);
+  }
+
+  /// Recupera o valor de 'rememberMe' do armazenamento local.
+  Future<bool> getRememberMe() async {
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('rememberMe') ?? false;
+  }
 }
