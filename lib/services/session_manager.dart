@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Gerenciador de sessão. Não é um widget — persiste dados do usuário via SharedPreferences.
 class SessionManager {
   /// Verifica se existe um e-mail salvo para determinar se o usuário está autenticado.
   Future<bool> isLoggedIn() async {

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Utilitários num geral.
-///
-/// Não é um widget — é uma classe helper que fornece métodos estáticos
-/// para obter informações da tela de forma segura (respeitando safe areas).
+/// Utilitários de tela: retorna altura e largura úteis respeitando safe areas.
 class ScreenHelper {
   static double getUsableHeight(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -18,4 +15,7 @@ class ScreenHelper {
     final safeRight = MediaQuery.of(context).padding.right;
     return screenWidth - safeLeft - safeRight;
   }
+
+  static bool isWideScreen(BuildContext context) =>
+      MediaQuery.of(context).size.width > 600;
 }

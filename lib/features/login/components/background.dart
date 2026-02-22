@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/features/login/components/auth.dart';
 
 import 'helper.dart';
 
-/// Cabeçalho das telas de autenticação.
-///
-/// Ocupa 30% da altura útil da tela. Usado para exibir títulos
-/// e mensagens de boas-vindas nas telas de login/signup/reset.
-/// Padding horizontal de 20px já incluso.
+/// Cabeçalho das telas de autenticação, ocupa 30% da altura útil.
+/// Em telas largas o header é limitado a 200px para não ficar esticado.
 class AuthHeader extends StatelessWidget {
   final Widget child;
 
@@ -16,20 +12,18 @@ class AuthHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usableHeight = ScreenHelper.getUsableHeight(context);
+    final wide = ScreenHelper.isWideScreen(context);
 
     return Container(
-      height: usableHeight * 0.3,
+      height: wide ? 200 : usableHeight * 0.3,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: child,
     );
   }
 }
 
-/// Container principal das telas de autenticação.
-///
-/// Ocupa 70% da altura útil da tela. Fundo branco com bordas
-/// arredondadas no topo, criando efeito de "card" sobre o gradiente.
-/// Padding horizontal de 20px já incluso.
+/// Container branco com bordas arredondadas no topo, ocupa 70% da altura útil.
+/// Em telas largas o height é determinado pelo conteúdo.
 class AuthFormContainer extends StatelessWidget {
   final Widget child;
   final Color color;
@@ -43,9 +37,10 @@ class AuthFormContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usableHeight = ScreenHelper.getUsableHeight(context);
+    final wide = ScreenHelper.isWideScreen(context);
 
     return Container(
-      height: usableHeight * 0.7,
+      height: wide ? null : usableHeight * 0.7,
       decoration: BoxDecoration(
         color: color,
         borderRadius: const BorderRadius.only(
@@ -54,17 +49,14 @@ class AuthFormContainer extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: wide ? 24 : 0),
         child: child,
       ),
     );
   }
 }
 
-/// Container com fundo gradiente.
-///
-/// Usado como background principal de telas. Recebe dois colors
-/// e aplica um LinearGradient da esquerda para direita.
+/// Container com gradiente linear, usado como fundo principal de telas.
 class GradientContainer extends StatelessWidget {
   final Color firstColor;
   final Color secondColor;

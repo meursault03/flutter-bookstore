@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:login_screen/features/login/components/text_styles.dart';
+import 'package:login_screen/features/shared/text_styles.dart';
 import 'package:login_screen/services/session_manager.dart';
 
+import '../../homepage/components/home_background.dart';
 import 'background.dart';
-import 'custom_buttons.dart';
+import '../../shared/custom_buttons.dart';
 
-/// Campo de texto com bordas arredondadas.
-/// Componente reutilizável para inputs. Suporta modo senha.
+/// Campo de texto com bordas arredondadas; suporta modo senha.
 class RoundTextInput extends StatelessWidget {
   final String hintText;
   final bool isPassword;
@@ -41,6 +41,7 @@ class RoundTextInput extends StatelessWidget {
   }
 }
 
+/// Alternador entre os modos de login e registro. Troca o formulário exibido conforme o modo ativo.
 class AuthToggle extends StatefulWidget {
   final bool isLogin;
   final Function(bool) onToggle;
@@ -51,6 +52,7 @@ class AuthToggle extends StatefulWidget {
   State<AuthToggle> createState() => _AuthToggle();
 }
 
+/// Estado interno do AuthToggle que gerencia a UI conforme o modo ativo.
 class _AuthToggle extends State<AuthToggle> {
   @override
   Widget build(BuildContext context) {
@@ -137,6 +139,7 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
+/// Estado do LoginForm com controle de campos, visibilidade de senha e "lembrar-me".
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -292,6 +295,11 @@ class _LoginFormState extends State<LoginForm> {
                       content: Text('Login realizado com sucesso!'),
                     ),
                   );
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
                 }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -306,6 +314,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
+/// Formulário de cadastro com campos: nome, sobrenome, email, senha e confirmação.
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
 
@@ -313,7 +322,7 @@ class RegisterForm extends StatefulWidget {
   State<RegisterForm> createState() => _RegisterForm();
 }
 
-/// Formulário de registro com campos: nome, sobrenome, email, senha e confirmação.
+/// Estado do RegisterForm com controle de todos os campos e validação de senha.
 class _RegisterForm extends State<RegisterForm> {
   TextEditingController forenameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
@@ -463,6 +472,12 @@ class _RegisterForm extends State<RegisterForm> {
                   content: Text('Registro realizado com sucesso!'),
                 ),
               );
+
+              // Adicione a instrução de navegação
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
             }
           },
         ),
@@ -500,6 +515,7 @@ class AuthHeaderContent extends StatelessWidget {
   }
 }
 
+/// Tela de autenticação. Combina o header e o alternador de formulários (login/registro).
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -507,6 +523,7 @@ class AuthScreen extends StatefulWidget {
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
+/// Estado da AuthScreen que controla a alternância entre login e registro.
 class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
 

@@ -1,0 +1,130 @@
+[
+  {
+    "id": 0,
+    "authorName": "Fiódor Dostoiévski",
+    "price": 85.90,
+    "title": "Crime e Castigo",
+    "description": "A angústia mental e os dilemas morais de um ex-estudante empobrecido em São Petersburgo.",
+    "image": "https://covers.openlibrary.org/b/id/13947662-L.jpg"
+  },
+  {
+    "id": 1,
+    "authorName": "Sun Tzu",
+    "price": 34.90,
+    "title": "A Arte da Guerra",
+    "description": "Tratado militar da China antiga focado em estratégia e táticas de combate.",
+    "image": "https://covers.openlibrary.org/b/id/13289297-L.jpg"
+  },
+  {
+    "id": 2,
+    "authorName": "George Orwell",
+    "price": 49.90,
+    "title": "1984",
+    "description": "Uma ficção científica social e conto preventivo sobre os perigos do totalitarismo e vigilância.",
+    "image": "https://covers.openlibrary.org/b/isbn/9788535914849-M.jpg"
+  },
+  {
+    "id": 3,
+    "authorName": "Fred Safier",
+    "price": 135.50,
+    "title": "Coleção Schaum: Pré-Cálculo",
+    "description": "Teoria e exercícios fundamentais para a preparação em engenharia e ciências exatas.",
+    "image": "https://down-br.img.susercontent.com/file/sg-11134201-7rcbw-lrht2u29q9bm09.webp"
+  },
+  {
+    "id": 4,
+    "authorName": "Marco Aurélio",
+    "price": 44.90,
+    "title": "Meditações",
+    "description": "Escritos pessoais do Imperador Romano sobre filosofia estoica, dever e morte.",
+    "image": "https://covers.openlibrary.org/b/isbn/9788550804860-M.jpg"
+  },
+  {
+    "id": 5,
+    "authorName": "Brian Kernighan & Dennis Ritchie",
+    "price": 215.00,
+    "title": "C: A Linguagem de Programação",
+    "description": "O guia de referência definitivo para a linguagem C, escrito por seus criadores.",
+    "image": "https://covers.openlibrary.org/b/id/86178-L.jpg"
+  },
+  {
+    "id": 6,
+    "authorName": "Friedrich Nietzsche",
+    "price": 54.90,
+    "title": "Além do Bem e do Mal",
+    "description": "Uma crítica feroz à moralidade tradicional e uma introdução ao conceito de vontade de poder.",
+    "image": "https://covers.openlibrary.org/b/id/14618155-M.jpg"
+  },
+  {
+    "id": 7,
+    "authorName": "Osamu Dazai",
+    "price": 69.90,
+    "title": "Declínio de um Homem",
+    "description": "Um romance semi-autobiográfico pungente sobre a alienação e a máscara da sanidade.",
+    "image": "https://covers.openlibrary.org/b/id/13135613-L.jpg"
+  },
+  {
+    "id": 8,
+    "authorName": "Nicolau Maquiavel",
+    "price": 29.90,
+    "title": "O Príncipe",
+    "description": "Um tratado político realista sobre como conquistar, manter e utilizar o poder.",
+    "image": "https://covers.openlibrary.org/b/id/15142439-M.jpg"
+  },
+  {
+    "id": 9,
+    "authorName": "Albert Camus",
+    "price": 59.90,
+    "title": "O Estrangeiro",
+    "description": "A história de um homem indiferente que comete um crime absurdo sob o sol da Argélia.",
+    "image": "https://covers.openlibrary.org/b/id/14573710-M.jpg"
+  },
+  {
+    "id": 10,
+    "authorName": "Franz Kafka",
+    "price": 39.90,
+    "title": "A Metamorfose",
+    "description": "Um caixeiro-viajante acorda transformado em um inseto monstruoso.",
+    "image": "https://covers.openlibrary.org/b/id/14822565-L.jpg"
+  },
+  {
+    "id": 11,
+    "authorName": "Machado de Assis",
+    "price": 34.90,
+    "title": "Memórias Póstumas de Brás Cubas",
+    "description": "Um defunto autor narra sua vida com ironia e pessimismo filosófico.",
+    "image": "https://covers.openlibrary.org/b/isbn/9788563560874-M.jpg"
+  },
+  {
+    "id": 12,
+    "authorName": "Aldous Huxley",
+    "price": 59.90,
+    "title": "Admirável Mundo Novo",
+    "description": "Uma sociedade futurista onde a felicidade é garantida pelo controle genético e drogas.",
+    "image": "https://covers.openlibrary.org/b/id/13623695-L.jpg"
+  },
+  {
+    "id": 13,
+    "authorName": "Hannah Arendt",
+    "price": 129.90,
+    "title": "As Origens do Totalitarismo",
+    "description": "Uma análise profunda do antissemitismo, imperialismo e os regimes totalitários do século XX.",
+    "image": "https://covers.openlibrary.org/b/id/14174854-L.jpg"
+  },
+  {
+    "id": 14,
+    "authorName": "Yuval Noah Harari",
+    "price": 84.90,
+    "title": "Sapiens: Uma Breve História da Humanidade",
+    "description": "Uma narrativa envolvente sobre a evolução do Homo sapiens e o impacto na Terra.",
+    "image": "https://covers.openlibrary.org/b/id/14540965-L.jpg"
+  },
+  {
+    "id": 15,
+    "authorName": "Robert C. Martin",
+    "price": 95.00,
+    "title": "Código Limpo",
+    "description": "Um guia prático sobre engenharia de software ágil e boas práticas de programação.",
+    "image": "https://covers.openlibrary.org/b/isbn/9788576082675-M.jpg"
+  }
+]

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Texto estilizado com a fonte Inter.
-///
-/// Componente reutilizável para manter consistência tipográfica no app.
-/// Centraliza o texto automaticamente.
+/// Texto estilizado com a fonte Inter, centralizado automaticamente.
 class StyleText extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -34,7 +31,7 @@ class StyleText extends StatelessWidget {
   }
 }
 
-///Versão nao centralizada do StyleText, para casos onde o alinhamento precisa ser diferente.
+/// Variante não centralizada do StyleText para alinhamentos customizados.
 class StyleTextUnaligned extends StatelessWidget {
   final String text;
   final double fontSize;
