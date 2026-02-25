@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'helper.dart';
+import '../../shared/helper.dart';
 
 /// Cabeçalho das telas de autenticação, ocupa 30% da altura útil.
 /// Em telas largas o header é limitado a 200px para não ficar esticado.

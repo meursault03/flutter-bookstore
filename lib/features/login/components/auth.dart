@@ -1,45 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:login_screen/features/shared/text_styles.dart';
-import 'package:login_screen/services/session_manager.dart';
 
-import '../../homepage/components/home_background.dart';
+import 'auth_login.dart';
+import 'auth_register.dart';
 import 'background.dart';
-import '../../shared/custom_buttons.dart';
-
-/// Campo de texto com bordas arredondadas; suporta modo senha.
-class RoundTextInput extends StatelessWidget {
-  final String hintText;
-  final bool isPassword;
-  TextEditingController controller;
-  RoundTextInput(
-    this.hintText, {
-    super.key,
-    required this.isPassword,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: TextField(
-        controller: controller,
-        style: GoogleFonts.inter(),
-        obscureText: isPassword,
-        obscuringCharacter: '•',
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          hintText: hintText,
-          hintStyle: const TextStyle(color: Color.fromARGB(255, 158, 158, 158)),
-        ),
-      ),
-    );
-  }
-}
+import '../../shared/helper.dart';
 
 /// Alternador entre os modos de login e registro. Troca o formulário exibido conforme o modo ativo.
 class AuthToggle extends StatefulWidget {
@@ -131,361 +96,6 @@ class _AuthToggle extends State<AuthToggle> {
   }
 }
 
-/// Formulário de login com campos: email e senha.
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-/// Estado do LoginForm com controle de campos, visibilidade de senha e "lembrar-me".
-class _LoginFormState extends State<LoginForm> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _rememberMe = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadRememberMe();
-  }
-
-  Future<void> _loadRememberMe() async {
-    final remembered = await SessionManager().getRememberMe();
-    if (remembered) {
-      final session = await SessionManager().getSession();
-      if (context.mounted) {
-        setState(() {
-          _rememberMe = true;
-          emailController.text = session['email'] ?? '';
-        });
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 30),
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 3),
-          child: StyleTextUnaligned(
-            'Email',
-            13,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey,
-          ),
-        ),
-        RoundTextInput(
-          'example@dominio.com',
-          isPassword: false,
-          controller: emailController,
-        ),
-        const SizedBox(height: 16),
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 3),
-          child: StyleTextUnaligned(
-            'Senha',
-            13,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey,
-          ),
-        ),
-        SizedBox(
-          child: TextField(
-            controller: passwordController,
-            obscureText: _obscurePassword,
-            obscuringCharacter: '•',
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: '•••••••••••',
-              hintStyle: const TextStyle(
-                color: Color.fromARGB(255, 158, 158, 158),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Checkbox(
-                    value: _rememberMe,
-                    onChanged: (value) {
-                      setState(() {
-                        _rememberMe = value ?? false;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                StyleTextUnaligned(
-                  'Lembrar de mim',
-                  13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[600],
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Funcionalidade em desenvolvimento'),
-                  ),
-                );
-              },
-              child: const StyleTextUnaligned(
-                'Esqueceu a senha?',
-                13,
-                fontWeight: FontWeight.w600,
-                color: Colors.red,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        RoundButton(
-          'Login',
-          onPressed: () async {
-            if (emailController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Digite seu email.')),
-              );
-              return;
-            }
-            final Map session = await SessionManager().getSession();
-            if (context.mounted) {
-              if (session['email'] == emailController.text) {
-                await SessionManager().setRememberMe(_rememberMe);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Login realizado com sucesso!'),
-                    ),
-                  );
-
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
-                }
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Email incorreto.')),
-                );
-              }
-            }
-          },
-        ),
-      ],
-    );
-  }
-}
-
-/// Formulário de cadastro com campos: nome, sobrenome, email, senha e confirmação.
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key});
-
-  @override
-  State<RegisterForm> createState() => _RegisterForm();
-}
-
-/// Estado do RegisterForm com controle de todos os campos e validação de senha.
-class _RegisterForm extends State<RegisterForm> {
-  TextEditingController forenameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-
-  @override
-  void dispose() {
-    forenameController.dispose();
-    surnameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              flex: 50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8, bottom: 3),
-                    child: StyleTextUnaligned(
-                      'Nome',
-                      13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  RoundTextInput(
-                    'João',
-                    isPassword: false,
-                    controller: forenameController,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              flex: 50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8, bottom: 3),
-                    child: StyleTextUnaligned(
-                      'Sobrenome',
-                      13,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  RoundTextInput(
-                    'da Silva',
-                    isPassword: false,
-                    controller: surnameController,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 15),
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 3),
-          child: StyleTextUnaligned(
-            'Email',
-            13,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey,
-          ),
-        ),
-        RoundTextInput(
-          'example@dominio.com',
-          isPassword: false,
-          controller: emailController,
-        ),
-        const SizedBox(height: 16),
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 3),
-          child: StyleTextUnaligned(
-            'Senha',
-            13,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey,
-          ),
-        ),
-        RoundTextInput(
-          '•••••••••••',
-          isPassword: true,
-          controller: passwordController,
-        ),
-        const SizedBox(height: 16),
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 3),
-          child: StyleTextUnaligned(
-            'Confirmar senha',
-            13,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey,
-          ),
-        ),
-        RoundTextInput(
-          '•••••••••••',
-          isPassword: true,
-          controller: confirmPasswordController,
-        ),
-        const SizedBox(height: 24),
-        RoundButton(
-          'Registrar',
-          onPressed: () async {
-            // Check for empty fields
-            if (forenameController.text.isEmpty ||
-                surnameController.text.isEmpty ||
-                emailController.text.isEmpty ||
-                passwordController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Preencha todos os campos.')),
-              );
-              return;
-            }
-            if (passwordController.text != confirmPasswordController.text) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('As senhas não coincidem.')),
-              );
-              return;
-            }
-            await SessionManager().saveSession(
-              forenameController.text,
-              surnameController.text,
-              emailController.text,
-            );
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Registro realizado com sucesso!'),
-                ),
-              );
-
-              // Adicione a instrução de navegação
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
-              );
-            }
-          },
-        ),
-      ],
-    );
-  }
-}
-
 /// Conteudo pro header das telas de login/signup/reset.
 class AuthHeaderContent extends StatelessWidget {
   final bool isLogin;
@@ -516,6 +126,7 @@ class AuthHeaderContent extends StatelessWidget {
 }
 
 /// Tela de autenticação. Combina o header e o alternador de formulários (login/registro).
+/// Gerencia seu próprio layout: mobile usa percentual de altura, desktop exibe card centralizado.
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -535,14 +146,64 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AuthHeader(child: AuthHeaderContent(isLogin: isLogin)),
-        AuthFormContainer(
-          color: const Color.fromARGB(255, 248, 250, 252),
-          child: AuthToggle(isLogin: isLogin, onToggle: onToggle),
+    final wide = ScreenHelper.isWideScreen(context);
+
+    Widget content;
+
+    if (!wide) {
+      content = SingleChildScrollView(
+        child: Column(
+          children: [
+            AuthHeader(child: AuthHeaderContent(isLogin: isLogin)),
+            AuthFormContainer(
+              color: const Color.fromARGB(255, 248, 250, 252),
+              child: AuthToggle(isLogin: isLogin, onToggle: onToggle),
+            ),
+          ],
         ),
-      ],
+      );
+    } else {
+      content = Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 48),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AuthHeaderContent(isLogin: isLogin),
+                const SizedBox(height: 32),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 450),
+                  child: Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 248, 250, 252),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: AuthToggle(isLogin: isLogin, onToggle: onToggle),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 15, 81, 250),
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: GradientContainer(
+          const Color.fromARGB(255, 15, 81, 250),
+          const Color.fromARGB(255, 0, 180, 238),
+          child: SafeArea(
+            bottom: false,
+            child: content,
+          ),
+        ),
+      ),
     );
   }
 }

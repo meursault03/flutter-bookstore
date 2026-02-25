@@ -3,6 +3,7 @@ import '../../shared/custom_buttons.dart';
 import '../../shared/responsive_center.dart';
 import '../../shared/text_styles.dart';
 import 'mock_data.dart';
+import 'book_purchase_bar.dart';
 import 'purchase_manager.dart';
 
 /// Tela de finalização de compra. Exibe o resumo do pedido e ações de pagamento.
@@ -108,7 +109,26 @@ class CheckoutScreen extends StatelessWidget {
                 child: RoundButton(
                   'Confirmar Pedido',
                   onPressed: () {
-                    PurchaseManager().registrarCompra(livro);
+                    final cart = CartManager();
+                    final cartItems = cart.itens.value;
+                    if (cartItems.isNotEmpty) {
+                      final Map<int, ({Book book, int qty})> grouped = {};
+                      for (final book in cartItems) {
+                        final current = grouped[book.id];
+                        grouped[book.id] = current == null
+                            ? (book: book, qty: 1)
+                            : (book: book, qty: current.qty + 1);
+                      }
+                      for (final entry in grouped.values) {
+                        PurchaseManager().registrarCompra(
+                          entry.book,
+                          quantity: entry.qty,
+                        );
+                      }
+                    } else {
+                      PurchaseManager().registrarCompra(livro);
+                    }
+                    CartManager().itens.value = [];
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Pedido realizado com sucesso!'),

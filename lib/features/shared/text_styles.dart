@@ -37,12 +37,18 @@ class StyleTextUnaligned extends StatelessWidget {
   final double fontSize;
   final Color? color;
   final FontWeight? fontWeight;
+  final int? maxLines;
+  final TextOverflow? overflow;
+  final TextAlign? textAlign;
 
   const StyleTextUnaligned(
     this.text,
     this.fontSize, {
     this.color = Colors.white,
     required this.fontWeight,
+    this.maxLines,
+    this.overflow,
+    this.textAlign,
     super.key,
   });
 
@@ -50,6 +56,9 @@ class StyleTextUnaligned extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      maxLines: maxLines,
+      overflow: overflow,
+      textAlign: textAlign,
       style: GoogleFonts.inter(
         fontSize: fontSize,
         fontWeight: fontWeight,

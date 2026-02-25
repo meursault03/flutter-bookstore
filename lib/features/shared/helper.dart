@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 /// Utilitários de tela: retorna altura e largura úteis respeitando safe areas.
@@ -18,4 +20,14 @@ class ScreenHelper {
 
   static bool isWideScreen(BuildContext context) =>
       MediaQuery.of(context).size.width > 600;
+}
+
+/// Permite scrollar na vertical em múltiplos dispositivos
+class AppScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+  };
 }

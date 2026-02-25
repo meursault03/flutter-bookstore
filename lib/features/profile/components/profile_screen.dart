@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/session_manager.dart';
 import '../../login/components/auth.dart';
-import '../../login/components/background.dart';
 import '../../shared/app_colors.dart';
 import '../../shared/custom_buttons.dart';
 import '../../shared/responsive_center.dart';
@@ -57,15 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: GradientContainer(
-              Color.fromARGB(255, 15, 81, 250),
-              Color.fromARGB(255, 0, 180, 238),
-              child: SingleChildScrollView(
-                child: ResponsiveCenter(child: AuthScreen()),
-              ),
-            ),
-          ),
+          builder: (_) => const Scaffold(body: AuthScreen()),
         ),
         (_) => false,
       );
