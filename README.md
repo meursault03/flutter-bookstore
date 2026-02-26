@@ -17,13 +17,24 @@ A Flutter-based mobile application simulating a bookstore e-commerce environment
 * **Cross-Platform Responsiveness:** Mobile-first approach with geometric stabilization for tablets and web/desktop environments.
 
 ### Technical Architecture
-The project adheres to separation of concerns and a feature-driven architecture:
+The project adheres to separation of concerns and a feature-driven architecture.
+
+### Tested Environments
+| Platform | Device / Resolution |
+|----------|-------------------|
+| Android  | Pixel 5 (Android 13) |
+| Web      | 1080p (1920×1080) |
+| Web      | QHD (2560×1440) |
+
+> Other devices and resolutions may work but have not been formally validated.
 
 ### Getting Started
 
 **Prerequisites:**
-* [Flutter SDK](https://docs.flutter.dev/get-started/install)
-* Android/iOS Emulator or Web Browser (Chrome/Edge)
+* [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.x or later
+* Dart SDK 3.x (bundled with Flutter)
+* Android Studio or VS Code with the Flutter and Dart extensions
+* Android Emulator (API 30+) or a physical device, **or** Chrome/Edge for web
 
 **Installation:**
 1. Clone the repository:
@@ -36,7 +47,11 @@ The project adheres to separation of concerns and a feature-driven architecture:
    ```
 3. Run the application:
    ```bash
+   # Android (emulator or physical device)
    flutter run
+
+   # Web (Chrome)
+   flutter run -d chrome
    ```
 
 ### Project Structure
@@ -66,13 +81,24 @@ Aplicativo mobile construído em Flutter que simula um ambiente de e-commerce pa
 * **Responsividade Multiplataforma:** Abordagem *mobile-first* com estabilização geométrica para tablets e ambientes web/desktop.
 
 ### Arquitetura Técnica
-O projeto segue o princípio de separação de responsabilidades e uma arquitetura orientada a funcionalidades (Feature-First):
+O projeto segue o princípio de separação de responsabilidades e uma arquitetura orientada a funcionalidades (Feature-First).
+
+### Ambientes Testados
+| Plataforma | Dispositivo / Resolução |
+|------------|------------------------|
+| Android    | Pixel 5 (Android 13) |
+| Web        | 1080p (1920×1080) |
+| Web        | QHD (2560×1440) |
+
+> Outros dispositivos e resoluções podem funcionar, mas não foram validados formalmente.
 
 ### Como Executar
 
 **Pré-requisitos:**
-* [Flutter SDK](https://docs.flutter.dev/get-started/install)
-* Emulador Android/iOS ou Navegador Web (Chrome/Edge)
+* [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.x ou superior
+* Dart SDK 3.x (incluso no Flutter)
+* Android Studio ou VS Code com as extensões Flutter e Dart
+* Emulador Android (API 30+) ou dispositivo físico, **ou** Chrome/Edge para web
 
 **Instalação:**
 1. Clone o repositório:
@@ -85,7 +111,11 @@ O projeto segue o princípio de separação de responsabilidades e uma arquitetu
    ```
 3. Execute o aplicativo:
    ```bash
+   # Android (emulador ou dispositivo físico)
    flutter run
+
+   # Web (Chrome)
+   flutter run -d chrome
    ```
 
 ### Estrutura do Projeto
