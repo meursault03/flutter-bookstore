@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/// Modelo de dados de um livro. Contém título, autor, preço, descrição e imagem. Suporta `fromJson()`.
+/// Modelo de dados de um livro. Contém título, autor, preço, descrição, imagem, categoria e estoque. Suporta `fromJson()`.
 class Book {
   final int id;
   final String authorName;
@@ -9,6 +9,8 @@ class Book {
   final String title;
   final String description;
   final String image;
+  final String categoria;
+  final int estoque;
 
   const Book({
     required this.id,
@@ -17,6 +19,8 @@ class Book {
     required this.title,
     required this.description,
     required this.image,
+    required this.categoria,
+    required this.estoque,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -27,8 +31,22 @@ class Book {
       title: json['title'] as String,
       description: json['description'] as String,
       image: json['image'] as String,
+      categoria: json['categoria'] as String,
+      estoque: json['estoque'].toInt() as int,
     );
   }
+}
+
+/// Retorna as categorias únicas na ordem de aparição na lista.
+List<String> extractCategories(List<Book> books) {
+  final seen = <String>{};
+  final categories = <String>[];
+  for (final book in books) {
+    if (seen.add(book.categoria)) {
+      categories.add(book.categoria);
+    }
+  }
+  return categories;
 }
 
 Future<List<Book>> loadBooks() async {

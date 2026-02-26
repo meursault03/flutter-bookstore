@@ -23,49 +23,51 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: colors.background,
+        foregroundColor: colors.textPrimary,
         elevation: 0,
         centerTitle: true,
-        title: const StyleTextUnaligned(
+        title: StyleTextUnaligned(
           'Carrinho',
           18,
           fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
+          color: colors.textPrimary,
         ),
       ),
       body: ValueListenableBuilder<List<Book>>(
         valueListenable: CartManager().itens,
         builder: (context, itens, _) {
-          if (itens.isEmpty) return _buildEmptyState();
+          if (itens.isEmpty) return _buildEmptyState(context);
           return _buildCartContent(context, itens);
         },
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final colors = AppColors.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey.shade300),
+          Icon(Icons.shopping_cart_outlined, size: 80, color: colors.surfaceLight),
           const SizedBox(height: 16),
-          const StyleTextUnaligned(
+          StyleTextUnaligned(
             'Seu carrinho está vazio',
             18,
             fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
           ),
           const SizedBox(height: 8),
-          const StyleTextUnaligned(
+          StyleTextUnaligned(
             'Adicione livros para vê-los aqui',
             14,
             fontWeight: FontWeight.w400,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
           ),
         ],
       ),
@@ -83,10 +85,13 @@ class CartScreen extends StatelessWidget {
             child: ListView.separated(
               padding: const EdgeInsets.all(AppColors.paddingPage),
               itemCount: grouped.length,
-              separatorBuilder: (_, _) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Container(height: 1, color: AppColors.divider),
-              ),
+              separatorBuilder: (context, _) {
+                final colors = AppColors.of(context);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Container(height: 1, color: colors.divider),
+                );
+              },
               itemBuilder: (context, index) {
                 final item = grouped[index];
                 return _CartItemRow(
@@ -110,6 +115,7 @@ class CartScreen extends StatelessWidget {
       builder: (context, itens, _) {
         if (itens.isEmpty) return const SizedBox.shrink();
 
+        final colors = AppColors.of(context);
         return SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(
@@ -117,9 +123,9 @@ class CartScreen extends StatelessWidget {
               vertical: AppColors.paddingCard,
             ),
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: colors.background,
               border: Border(
-                top: BorderSide(color: Colors.grey.shade200, width: 1),
+                top: BorderSide(color: colors.divider, width: 1),
               ),
             ),
             child: Column(
@@ -132,13 +138,13 @@ class CartScreen extends StatelessWidget {
                       '${itens.length} ${itens.length == 1 ? "item" : "itens"}',
                       14,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                     StyleTextUnaligned(
                       'R\$ ${cart.precoTotal.toStringAsFixed(2)}',
                       20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: colors.textPrimary,
                     ),
                   ],
                 ),
@@ -146,10 +152,11 @@ class CartScreen extends StatelessWidget {
                 RoundButton(
                   'Finalizar Compra',
                   onPressed: () {
+                    final grouped = _grouped(itens);
                     Navigator.push<void>(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (_) => CheckoutScreen(livro: itens.first),
+                        builder: (_) => CheckoutScreen(itens: grouped),
                       ),
                     );
                   },
@@ -178,6 +185,7 @@ class _CartItemRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -191,8 +199,8 @@ class _CartItemRow extends StatelessWidget {
             errorBuilder: (context, error, stack) => Container(
               width: 56,
               height: 80,
-              color: AppColors.surfaceLight,
-              child: const Icon(Icons.book_outlined, color: AppColors.iconInactive),
+              color: colors.surfaceLight,
+              child: Icon(Icons.book_outlined, color: colors.iconInactive),
             ),
           ),
         ),
@@ -205,14 +213,14 @@ class _CartItemRow extends StatelessWidget {
                 book.title,
                 15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
               const SizedBox(height: 2),
               StyleTextUnaligned(
                 book.authorName,
                 13,
                 fontWeight: FontWeight.w400,
-                color: AppColors.iconInactive,
+                color: colors.iconInactive,
               ),
               const SizedBox(height: 8),
               StyleTextUnaligned(
@@ -248,9 +256,10 @@ class _QuantityControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: colors.divider),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -258,7 +267,7 @@ class _QuantityControl extends StatelessWidget {
         children: [
           _ControlButton(
             icon: quantity == 1 ? Icons.delete_outline : Icons.remove,
-            color: quantity == 1 ? AppColors.badgeRed : AppColors.textPrimary,
+            color: quantity == 1 ? AppColors.badgeRed : colors.textPrimary,
             onTap: onRemove,
           ),
           Padding(
@@ -267,12 +276,12 @@ class _QuantityControl extends StatelessWidget {
               '$quantity',
               15,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+              color: colors.textPrimary,
             ),
           ),
           _ControlButton(
             icon: Icons.add,
-            color: AppColors.textPrimary,
+            color: colors.textPrimary,
             onTap: onAdd,
           ),
         ],

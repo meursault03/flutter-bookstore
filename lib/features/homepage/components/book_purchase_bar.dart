@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../shared/app_colors.dart';
 import '../../shared/custom_buttons.dart';
 import '../../shared/text_styles.dart';
 import 'checkout_screen.dart';
@@ -35,13 +36,14 @@ class BookPurchaseBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           border: Border(
-            top: BorderSide(color: Colors.grey.shade200, width: 1),
+            top: BorderSide(color: colors.divider, width: 1),
           ),
         ),
         child: Column(
@@ -54,13 +56,13 @@ class BookPurchaseBar extends StatelessWidget {
                   'Preço Total  ',
                   12,
                   fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade600,
+                  color: colors.textSecondary,
                 ),
                 StyleTextUnaligned(
                   'R\$ ${livro.price.toStringAsFixed(2)}',
                   18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: colors.textPrimary,
                 ),
               ],
             ),
@@ -70,7 +72,7 @@ class BookPurchaseBar extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push<void>(
                   MaterialPageRoute<void>(
-                    builder: (_) => CheckoutScreen(livro: livro),
+                    builder: (_) => CheckoutScreen.compraAvulsa(livro: livro),
                   ),
                 );
               },

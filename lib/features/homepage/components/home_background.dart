@@ -66,18 +66,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Colors.indigo;
   }
 
-  ///Serve para a construção de novas telas enquanto as antigas se mantém existindo
+  ///Navega para a tela de detalhes do livro
   void _navigateToDetails(Book book) {
-    Navigator.push(
+    Navigator.push<void>(
       context,
-      MaterialPageRoute(builder: (context) => BookDetailsScreen(book: book)),
+      MaterialPageRoute<void>(builder: (_) => BookDetailsScreen(book: book)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: FutureBuilder<List<Book>>(
           future: _booksFuture,
@@ -125,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Constrói o cabeçalho da tela inicial. Captura a hora atual para definir a saudação e o emoji.
   /// Apresenta o nome do usuário e o convite para a descoberta de novas leituras.
   Widget _buildHeader() {
+    final colors = AppColors.of(context);
     final hour = DateTime.now().hour;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -136,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: GoogleFonts.inter(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: colors.textPrimary,
               ),
               children: [
                 TextSpan(text: '${_greetingForHour(hour)},\n$_userName '),
@@ -152,11 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const StyleTextUnaligned(
+          StyleTextUnaligned(
             'Descubra sua próxima leitura',
             16,
             fontWeight: FontWeight.w400,
-            color: Colors.black54,
+            color: colors.textSubtle,
           ),
         ],
       ),
@@ -166,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildFeaturedCarousel(List<Book> books) {
     if (books.isEmpty) return const SizedBox.shrink();
 
+    final colors = AppColors.of(context);
     final wide = ScreenHelper.isWideScreen(context);
     final screenHeight = MediaQuery.of(context).size.height;
     final carouselHeight = (screenHeight * 0.55).clamp(420.0, 650.0);
@@ -190,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
+                    color: colors.cardShadow,
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -204,12 +207,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   height: double.infinity,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey.shade200,
-                    child: const Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: Colors.grey,
-                      ),
+                    color: colors.surfaceLight,
+                    child: Icon(
+                      Icons.image_not_supported,
+                      color: colors.iconInactive,
                     ),
                   ),
                 ),
@@ -221,7 +222,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Classe para o setor de featured books. Deixei hardcoded uns minimos e maximos
+  /// de tamanho para não ter problema com responsividade em outras plataformas
   Widget _buildSectionTitle(String title, List<Book> allBooks) {
+    final colors = AppColors.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
@@ -231,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title,
             20,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: colors.textPrimary,
           ),
           GestureDetector(
             onTap: () {
@@ -245,14 +249,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: colors.surfaceLight,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const StyleTextUnaligned(
+              child: StyleTextUnaligned(
                 'Ver todos',
                 12,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: colors.textPrimary,
               ),
             ),
           ),
@@ -264,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBooksList(List<Book> books) {
     if (books.isEmpty) return const SizedBox.shrink();
 
+    final colors = AppColors.of(context);
     return SizedBox(
       height: 310,
       child: ListView.builder(
@@ -286,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: colors.cardShadow,
                             blurRadius: 6,
                             offset: const Offset(0, 3),
                           ),
@@ -301,11 +306,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: double.infinity,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                                color: Colors.grey.shade200,
-                                child: const Center(
+                                color: colors.surfaceLight,
+                                child: Center(
                                   child: Icon(
                                     Icons.image_not_supported,
-                                    color: Colors.grey,
+                                    color: colors.iconInactive,
                                   ),
                                 ),
                               ),
@@ -318,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     book.title,
                     13,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black87,
+                    color: colors.textPrimary,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -327,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     book.authorName,
                     11,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade600,
+                    color: colors.textSecondary,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -336,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'R\$ ${book.price.toStringAsFixed(2)}',
                     14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.blue.shade700,
+                    color: AppColors.primaryBlue,
                   ),
                 ],
               ),
@@ -348,13 +353,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavigationBar() {
+    final colors = AppColors.of(context);
     return BottomNavigationBar(
       currentIndex: 0,
+      backgroundColor: colors.background,
       showSelectedLabels: true,
       showUnselectedLabels: true,
       iconSize: 28,
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: colors.textPrimary,
+      unselectedItemColor: colors.iconInactive,
       selectedLabelStyle: const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 12,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../shared/app_colors.dart';
 import '../../shared/responsive_center.dart';
 import '../../shared/text_styles.dart';
 import 'book_cover.dart';
@@ -13,18 +14,19 @@ class BookDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: colors.background,
+        foregroundColor: colors.textPrimary,
         elevation: 0,
         centerTitle: true,
-        title: const StyleTextUnaligned(
+        title: StyleTextUnaligned(
           'Detalhes',
           18,
           fontWeight: FontWeight.w600,
-          color: Colors.black,
+          color: colors.textPrimary,
         ),
       ),
       body: ResponsiveCenter(
@@ -38,11 +40,11 @@ class BookDetailsScreen extends StatelessWidget {
                   children: [
                     BookCover(imageUrl: book.image),
                     const SizedBox(height: 32),
-                    _buildTitleAndAuthor(),
+                    _buildTitleAndAuthor(colors),
                     const SizedBox(height: 24),
-                    Container(height: 1, color: Colors.grey.shade200),
+                    Container(height: 1, color: colors.divider),
                     const SizedBox(height: 24),
-                    _buildSynopsis(),
+                    _buildSynopsis(colors),
                   ],
                 ),
               ),
@@ -54,7 +56,7 @@ class BookDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTitleAndAuthor() {
+  Widget _buildTitleAndAuthor(AppColorsTheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -62,35 +64,35 @@ class BookDetailsScreen extends StatelessWidget {
           book.title,
           26,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: colors.textPrimary,
         ),
         const SizedBox(height: 8),
         StyleTextUnaligned(
           book.authorName,
           16,
           fontWeight: FontWeight.w500,
-          color: Colors.grey.shade600,
+          color: colors.textSecondary,
         ),
       ],
     );
   }
 
-  Widget _buildSynopsis() {
+  Widget _buildSynopsis(AppColorsTheme colors) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const StyleTextUnaligned(
+        StyleTextUnaligned(
           'Sinopse',
           20,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: colors.textPrimary,
         ),
         const SizedBox(height: 16),
         StyleTextUnaligned(
           book.description,
           15,
           fontWeight: FontWeight.w400,
-          color: Colors.black87,
+          color: colors.textSubtle,
         ),
         const SizedBox(height: 40),
       ],

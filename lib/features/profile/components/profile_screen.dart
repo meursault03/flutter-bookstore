@@ -5,6 +5,7 @@ import '../../shared/app_colors.dart';
 import '../../shared/custom_buttons.dart';
 import '../../shared/responsive_center.dart';
 import '../../shared/text_styles.dart';
+import '../../shared/theme_manager.dart';
 import '../../homepage/components/book_purchase_bar.dart';
 import '../../homepage/components/purchase_manager.dart';
 import 'purchase_history_screen.dart';
@@ -65,25 +66,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     if (!_loaded) {
-      return const Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        backgroundColor: colors.background,
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: colors.background,
+        foregroundColor: colors.textPrimary,
         elevation: 0,
         centerTitle: true,
-        title: const StyleTextUnaligned(
+        title: StyleTextUnaligned(
           'Perfil',
           18,
           fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
+          color: colors.textPrimary,
         ),
       ),
       body: SingleChildScrollView(
@@ -97,14 +100,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _fullName,
                 22,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
               const SizedBox(height: 4),
               StyleTextUnaligned(
                 _email,
                 14,
                 fontWeight: FontWeight.w400,
-                color: AppColors.textSecondary,
+                color: colors.textSecondary,
               ),
               const SizedBox(height: 32),
               _ProfileMenuItem(
@@ -125,11 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: 'Pagamento',
                 onTap: () => _showPlaceholder('Pagamento'),
               ),
-              _ProfileMenuItem(
-                icon: Icons.settings_outlined,
-                label: 'Configurações',
-                onTap: () => _showPlaceholder('Configurações'),
-              ),
+              const _DarkModeToggle(),
               const SizedBox(height: 32),
               OutlinedRoundButton(
                 'Sair',
@@ -170,6 +169,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+class _DarkModeToggle extends StatelessWidget {
+  const _DarkModeToggle();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: ThemeManager().themeMode,
+      builder: (context, mode, _) {
+        final isDark = mode == ThemeMode.dark;
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: colors.divider, width: 1),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                isDark ? Icons.dark_mode : Icons.light_mode,
+                color: colors.textSecondary,
+                size: 22,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: StyleTextUnaligned(
+                  'Modo Escuro',
+                  15,
+                  fontWeight: FontWeight.w500,
+                  color: colors.textPrimary,
+                ),
+              ),
+              Switch(
+                value: isDark,
+                onChanged: (_) => ThemeManager().toggleTheme(),
+                activeTrackColor: AppColors.primaryBlue,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _ProfileMenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -183,31 +228,32 @@ class _ProfileMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppColors.radiusCard),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: AppColors.divider, width: 1),
+            bottom: BorderSide(color: colors.divider, width: 1),
           ),
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.textSecondary, size: 22),
+            Icon(icon, color: colors.textSecondary, size: 22),
             const SizedBox(width: 16),
             Expanded(
               child: StyleTextUnaligned(
                 label,
                 15,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.iconInactive,
+              color: colors.iconInactive,
               size: 20,
             ),
           ],

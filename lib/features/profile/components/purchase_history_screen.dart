@@ -18,64 +18,69 @@ class PurchaseHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: colors.background,
+        foregroundColor: colors.textPrimary,
         elevation: 0,
         centerTitle: true,
-        title: const StyleTextUnaligned(
+        title: StyleTextUnaligned(
           'Meus Pedidos',
           18,
           fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
+          color: colors.textPrimary,
         ),
       ),
       body: ValueListenableBuilder<List<Purchase>>(
         valueListenable: PurchaseManager().history,
         builder: (context, purchases, _) {
-          if (purchases.isEmpty) return _buildEmptyState();
-          return _buildList(purchases);
+          if (purchases.isEmpty) return _buildEmptyState(context);
+          return _buildList(context, purchases);
         },
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final colors = AppColors.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.receipt_long_outlined, size: 80, color: Colors.grey.shade300),
+          Icon(Icons.receipt_long_outlined, size: 80, color: colors.surfaceLight),
           const SizedBox(height: 16),
-          const StyleTextUnaligned(
+          StyleTextUnaligned(
             'Nenhum pedido ainda',
             18,
             fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
           ),
           const SizedBox(height: 8),
-          const StyleTextUnaligned(
+          StyleTextUnaligned(
             'Suas compras aparecerão aqui',
             14,
             fontWeight: FontWeight.w400,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildList(List<Purchase> purchases) {
+  Widget _buildList(BuildContext context, List<Purchase> purchases) {
     return ResponsiveCenter(
       child: ListView.separated(
         padding: const EdgeInsets.all(AppColors.paddingPage),
         itemCount: purchases.length,
-        separatorBuilder: (_, _) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Container(height: 1, color: AppColors.divider),
-        ),
+        separatorBuilder: (context, _) {
+          final colors = AppColors.of(context);
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Container(height: 1, color: colors.divider),
+          );
+        },
         itemBuilder: (context, index) {
           final purchase = purchases[index];
           return _PurchaseRow(purchase: purchase);
@@ -92,6 +97,7 @@ class _PurchaseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Row(
       children: [
         ClipRRect(
@@ -104,8 +110,8 @@ class _PurchaseRow extends StatelessWidget {
             errorBuilder: (context, error, stack) => Container(
               width: 56,
               height: 80,
-              color: AppColors.surfaceLight,
-              child: const Icon(Icons.book_outlined, color: AppColors.iconInactive),
+              color: colors.surfaceLight,
+              child: Icon(Icons.book_outlined, color: colors.iconInactive),
             ),
           ),
         ),
@@ -118,14 +124,14 @@ class _PurchaseRow extends StatelessWidget {
                 purchase.book.title,
                 15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: colors.textPrimary,
               ),
               const SizedBox(height: 2),
               StyleTextUnaligned(
                 purchase.book.authorName,
                 13,
                 fontWeight: FontWeight.w400,
-                color: AppColors.iconInactive,
+                color: colors.iconInactive,
               ),
               const SizedBox(height: 6),
               Row(
@@ -139,10 +145,10 @@ class _PurchaseRow extends StatelessWidget {
                   if (purchase.quantity > 1) ...[
                     const SizedBox(width: 6),
                     StyleTextUnaligned(
-                      '×${purchase.quantity}',
+                      '\u00d7${purchase.quantity}',
                       12,
                       fontWeight: FontWeight.w400,
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                   ],
                 ],
@@ -154,7 +160,7 @@ class _PurchaseRow extends StatelessWidget {
           PurchaseHistoryScreen._formatDate(purchase.date),
           12,
           fontWeight: FontWeight.w400,
-          color: AppColors.textSecondary,
+          color: colors.textSecondary,
         ),
       ],
     );

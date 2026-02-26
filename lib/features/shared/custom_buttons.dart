@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_screen/features/shared/text_styles.dart';
 
-/// Botão com gradiente e bordas arredondadas para CTAs principais.
+/// Botão com gradiente e bordas arredondadas para telas principais.
 class RoundButton extends StatelessWidget {
   final String text;
   final Color firstColor;
