@@ -19,15 +19,6 @@ A Flutter-based mobile application simulating a bookstore e-commerce environment
 ### Technical Architecture
 The project adheres to separation of concerns and a feature-driven architecture:
 
-1. **Responsive Layout Strategy:**
-   * Implementation of `ConstrainedBox` to establish maximum width boundaries (`maxWidth`), preventing UI distortion on ultrawide monitors.
-   * Usage of `MediaQuery` and mathematical clamping (`clamp()`) for vertical scaling, preserving image aspect ratios without hardcoded static heights.
-
-2. **Data Abstraction:**
-   * Data models are isolated from the UI layer.
-   * Navigation passes domain objects directly to screens via constructor injection.
-   * Current data fetching is handled via synchronous local mocks (JSON), architected to allow direct substitution with a REST API data provider layer in the future.
-
 ### Getting Started
 
 **Prerequisites:**
@@ -37,7 +28,7 @@ The project adheres to separation of concerns and a feature-driven architecture:
 **Installation:**
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/your-username/repository-name.git](https://github.com/your-username/repository-name.git)
+   git clone https://github.com/meursault03/flutter-bookstore
    ```
 2. Install dependencies:
    ```bash
@@ -77,15 +68,6 @@ Aplicativo mobile construído em Flutter que simula um ambiente de e-commerce pa
 ### Arquitetura Técnica
 O projeto segue o princípio de separação de responsabilidades e uma arquitetura orientada a funcionalidades (Feature-First):
 
-1. **Estratégia de Layout Responsivo:**
-   * Implementação de `ConstrainedBox` para estabelecer limites de largura máxima (`maxWidth`), prevenindo distorção da UI em monitores ultrawide.
-   * Uso de `MediaQuery` e restrição matemática (`clamp()`) para escalonamento vertical, preservando a proporção de imagens sem o uso de alturas estáticas fixas.
-
-2. **Abstração de Dados:**
-   * Modelos de dados estão isolados da camada de UI.
-   * A navegação transfere objetos de domínio diretamente para as telas via injeção de dependência no construtor.
-   * A obtenção de dados atual é feita através de mocks locais síncronos via JSON, estruturada de forma a permitir a substituição direta por uma camada de provedor de dados via API REST no futuro.
-
 ### Como Executar
 
 **Pré-requisitos:**
@@ -95,7 +77,7 @@ O projeto segue o princípio de separação de responsabilidades e uma arquitetu
 **Instalação:**
 1. Clone o repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+   git clone https://github.com/meursault03/flutter-bookstore
    ```
 2. Instale as dependências:
    ```bash
