@@ -1,22 +1,33 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Gerenciador de sessão. Não é um widget — persiste dados do usuário via SharedPreferences.
+///
+/// Deve ser inicializado uma vez via [init] antes do uso.
 class SessionManager {
+  static final SessionManager _instance = SessionManager._internal();
+  factory SessionManager() => _instance;
+  SessionManager._internal();
+
+  late final SharedPreferences _prefs;
+
+  /// Inicializa o gerenciador com a instância de SharedPreferences.
+  /// Deve ser chamado uma vez em main() antes de runApp().
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
   /// Verifica se existe um e-mail salvo para determinar se o usuário está autenticado.
-  Future<bool> isLoggedIn() async {
-    var prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('email');
+  bool isLoggedIn() {
+    var email = _prefs.getString('email');
     return email != null;
   }
 
   /// Recupera os dados de 'nome', 'sobrenome' e 'email' do armazenamento local.
-  Future<Map<String, String?>> getSession() async {
-    var prefs = await SharedPreferences.getInstance();
-
+  Map<String, String?> getSession() {
     return {
-      'forename': prefs.getString('forename'),
-      'surname': prefs.getString('surname'),
-      'email': prefs.getString('email'),
+      'forename': _prefs.getString('forename'),
+      'surname': _prefs.getString('surname'),
+      'email': _prefs.getString('email'),
     };
   }
 
@@ -26,27 +37,23 @@ class SessionManager {
     String surname,
     String email,
   ) async {
-    var prefs = await SharedPreferences.getInstance();
-    await prefs.setString('forename', forename);
-    await prefs.setString('surname', surname);
-    await prefs.setString('email', email);
+    await _prefs.setString('forename', forename);
+    await _prefs.setString('surname', surname);
+    await _prefs.setString('email', email);
   }
 
   /// Remove todos os dados do armazenamento local, encerrando a sessão atual.
   Future<void> clearSession() async {
-    var prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await _prefs.clear();
   }
 
   /// Armazena o valor de 'rememberMe' no armazenamento local.
   Future<void> setRememberMe(bool value) async {
-    var prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('rememberMe', value);
+    await _prefs.setBool('rememberMe', value);
   }
 
   /// Recupera o valor de 'rememberMe' do armazenamento local.
-  Future<bool> getRememberMe() async {
-    var prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('rememberMe') ?? false;
+  bool getRememberMe() {
+    return _prefs.getBool('rememberMe') ?? false;
   }
 }

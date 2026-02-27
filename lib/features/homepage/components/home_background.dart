@@ -32,11 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   ///Checa se o primeiro nome de fato é valido e seta o estado se as condicoes forem favoráveis
-  Future<void> _loadUserSession() async {
-    final Map<String, dynamic> session = await SessionManager().getSession();
-    final String? forename = session['forename'] as String?;
+  void _loadUserSession() {
+    final session = SessionManager().getSession();
+    final String? forename = session['forename'];
 
-    if (mounted && forename != null && forename.isNotEmpty) {
+    if (forename != null && forename.isNotEmpty) {
       setState(() {
         _userName = forename;
       });

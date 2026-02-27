@@ -29,16 +29,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadSession();
   }
 
-  Future<void> _loadSession() async {
-    final session = await SessionManager().getSession();
-    if (mounted) {
-      setState(() {
-        _forename = session['forename'] ?? '';
-        _surname = session['surname'] ?? '';
-        _email = session['email'] ?? '';
-        _loaded = true;
-      });
-    }
+  void _loadSession() {
+    final session = SessionManager().getSession();
+    setState(() {
+      _forename = session['forename'] ?? '';
+      _surname = session['surname'] ?? '';
+      _email = session['email'] ?? '';
+      _loaded = true;
+    });
   }
 
   String get _initials {

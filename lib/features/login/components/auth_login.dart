@@ -27,16 +27,14 @@ class _LoginFormState extends State<LoginForm> {
     _loadRememberMe();
   }
 
-  Future<void> _loadRememberMe() async {
-    final remembered = await SessionManager().getRememberMe();
+  void _loadRememberMe() {
+    final remembered = SessionManager().getRememberMe();
     if (remembered) {
-      final session = await SessionManager().getSession();
-      if (context.mounted) {
-        setState(() {
-          _rememberMe = true;
-          emailController.text = session['email'] ?? '';
-        });
-      }
+      final session = SessionManager().getSession();
+      setState(() {
+        _rememberMe = true;
+        emailController.text = session['email'] ?? '';
+      });
     }
   }
 
@@ -160,7 +158,7 @@ class _LoginFormState extends State<LoginForm> {
               );
               return;
             }
-            final Map session = await SessionManager().getSession();
+            final Map session = SessionManager().getSession();
             if (context.mounted) {
               if (session['email'] == emailController.text) {
                 await SessionManager().setRememberMe(_rememberMe);

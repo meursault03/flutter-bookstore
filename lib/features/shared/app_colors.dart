@@ -23,15 +23,6 @@ class AppColors {
   static const double radiusCard = 12.0;
   static const double radiusButton = 35.0;
 
-  // Legacy static constants (mantidos para compatibilidade com auth screens)
-  static const Color background = Colors.white;
-  static const Color textPrimary = Colors.black;
-  static const Color textSecondary = Color(0xFF757575);
-  static const Color textSubtle = Colors.black54;
-  static const Color divider = Color(0xFFEEEEEE);
-  static const Color surfaceLight = Color(0xFFEEEEEE);
-  static const Color iconInactive = Colors.grey;
-
   /// Acessor adaptivo via ThemeExtension.
   static AppColorsTheme of(BuildContext context) {
     return Theme.of(context).extension<AppColorsTheme>()!;

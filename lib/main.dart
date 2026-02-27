@@ -1,39 +1,32 @@
 import 'package:flutter/material.dart';
 import 'features/login/components/auth.dart';
-import 'features/shared/app_colors.dart';
+import 'features/shared/app_theme.dart';
 import 'features/shared/helper.dart';
 import 'features/shared/theme_manager.dart';
+import 'services/session_manager.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    ValueListenableBuilder<ThemeMode>(
+  await SessionManager().init();
+  runApp(const BookstoreApp());
+}
+
+class BookstoreApp extends StatelessWidget {
+  const BookstoreApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
       valueListenable: ThemeManager().themeMode,
       builder: (context, mode, _) {
         return MaterialApp(
           scrollBehavior: AppScrollBehavior(),
           themeMode: mode,
-          theme: ThemeData.light().copyWith(
-            scaffoldBackgroundColor: AppColorsTheme.light.background,
-            appBarTheme: AppBarTheme(
-              backgroundColor: AppColorsTheme.light.background,
-              foregroundColor: AppColorsTheme.light.textPrimary,
-              elevation: 0,
-            ),
-            extensions: const [AppColorsTheme.light],
-          ),
-          darkTheme: ThemeData.dark().copyWith(
-            scaffoldBackgroundColor: AppColorsTheme.dark.background,
-            appBarTheme: AppBarTheme(
-              backgroundColor: AppColorsTheme.dark.background,
-              foregroundColor: AppColorsTheme.dark.textPrimary,
-              elevation: 0,
-            ),
-            extensions: const [AppColorsTheme.dark],
-          ),
+          theme: buildLightTheme(),
+          darkTheme: buildDarkTheme(),
           home: const AuthScreen(),
         );
       },
-    ),
-  );
+    );
+  }
 }
