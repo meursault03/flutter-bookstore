@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// Builds the light [ThemeData] with [AppColorsTheme.light] as an extension.
+/// Constrói o [ThemeData] com [AppColorsTheme.light] como extensao.
 ThemeData buildLightTheme() {
   return ThemeData.light().copyWith(
     scaffoldBackgroundColor: AppColorsTheme.light.background,
@@ -15,7 +15,7 @@ ThemeData buildLightTheme() {
   );
 }
 
-/// Builds the dark [ThemeData] with [AppColorsTheme.dark] as an extension.
+/// Faz a versão dark [ThemeData] com [AppColorsTheme.dark] como extensão.
 ThemeData buildDarkTheme() {
   return ThemeData.dark().copyWith(
     scaffoldBackgroundColor: AppColorsTheme.dark.background,
